@@ -1,4 +1,7 @@
 # hello-world
 This repository is for practising the GitHub Flow.
-My name is Qhubekani Ntshangase ,currently enrolled at WeThinkCode_
+
+# About me
+My name is Qhubekani Ntshangase. 
+Currently enrolled at WeThinkCode_
 
