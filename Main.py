@@ -1,3 +1,4 @@
+import random
 import pygame
 import time
 
@@ -27,12 +28,18 @@ except pygame.error:
     quit()
 
 
+def objects(obj_x, obj_y, obj_w, obj_h, color):
+    pygame.draw.rect(gameDisplay, color, [obj_x, obj_y, obj_w, obj_h])
+
+
 def car(x, y):
     gameDisplay.blit(carImg, (x, y))
+
 
 def text_objects(text, font):
     textSurface = font.render(text, True, black)
     return textSurface, textSurface.get_rect()
+
 
 def msg_display(text):
     largeText = pygame.font.Font('freesansbold.ttf', 115)
@@ -48,12 +55,18 @@ def msg_display(text):
 def crash():
     msg_display("You Crashed")
 
+
 # Car initial position
 def game_loop():
     x = (display_width * 0.45)
     y = (display_height * 0.8)
 
     x_change = 0
+    object_startX = random.randrange(0, display_width)
+    object_startY = -600
+    object_speed = 7
+    object_width = 100
+    object_height = 100
 
     gameExit = False
 
@@ -75,10 +88,17 @@ def game_loop():
         x += x_change
 
         gameDisplay.fill(white)
+
+        objects(object_startX, object_startY, object_width, object_height, black)
+        object_startY += object_speed
         car(x, y)
 
         if x > display_width - car_width or x < 0:
             crash()
+
+        if object_startY >= display_height:
+            object_startY = 0 - object_height
+            object_startX = random.randrange(0, display_width)
 
         pygame.display.update()
         clock.tick(60)
