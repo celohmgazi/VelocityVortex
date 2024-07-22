@@ -13,6 +13,7 @@ white = (255, 255, 255)
 black = (0, 0, 0)
 red = (255, 0, 0)
 
+block_color = (53, 115, 255)
 car_width = 73
 
 gameDisplay = pygame.display.set_mode((display_width, display_height))
@@ -27,9 +28,14 @@ except pygame.error:
     pygame.quit()
     quit()
 
+def objects_dodged(count):
+    font = pygame.font.SysFont(None, 25)
+    text = font.render("Dodged: " + str(count), True, black)
+    gameDisplay.blit(text, (0, 0))
 
 def objects(obj_x, obj_y, obj_w, obj_h, color):
-    pygame.draw.rect(gameDisplay, color, [obj_x, obj_y, obj_w, obj_h])
+    pygame.draw.rect(gameDisplay, block_color, [obj_x, obj_y, obj_w, obj_h])
+
 
 
 def car(x, y):
@@ -67,7 +73,7 @@ def game_loop():
     object_speed = 7
     object_width = 100
     object_height = 100
-
+    dodged = 0
     gameExit = False
 
     while not gameExit:
@@ -92,6 +98,8 @@ def game_loop():
         objects(object_startX, object_startY, object_width, object_height, black)
         object_startY += object_speed
         car(x, y)
+        objects_dodged(dodged)
+
 
         if x > display_width - car_width or x < 0:
             crash()
@@ -99,6 +107,13 @@ def game_loop():
         if object_startY >= display_height:
             object_startY = 0 - object_height
             object_startX = random.randrange(0, display_width)
+            dodged += 1
+            object_speed += 1
+
+
+        if y < object_startY + object_height:
+            if x > object_startX and x < object_startX + object_width or x + car_width > object_startX and x + car_width < object_startX + object_width:
+                crash()
 
         pygame.display.update()
         clock.tick(60)
